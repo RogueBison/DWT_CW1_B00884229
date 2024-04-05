@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 export default function Form(props) {
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [addition, setAddition] = useState(false);
   useEffect(() => {
     if (addition) {
@@ -15,31 +16,52 @@ export default function Form(props) {
       return;
     }
     setAddition(true);
-    props.addTask(name);
+    props.addTask(name, description);
     setName("");
+    setDescription("");
   }
 
-  function handleChange() {
+  function handleNameChange() {
     setName(event.target.value);
+    console.log(event.target.value);
+  }
+
+  function handleDescChange() {
+    setDescription(event.target.value);
     console.log(event.target.value);
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <h2 className="label-wrapper">
-        <label htmlFor="new-todo-input" className="label__lg">
-          Make a report here:
+        <label htmlFor="new-todo-name" className="label__lg">
+          Enter a name for new report:
         </label>
       </h2>
 
       <input
         type="text"
-        id="new-todo-input"
+        id="new-todo-name"
         className="input input__lg"
         name="text"
         autoComplete="off"
         value={name}
-        onChange={handleChange}
+        onChange={handleNameChange}
+      />
+
+      <h2 className="label-wrapper">
+        <label htmlFor="new-todo-desc" className="label__lg">
+          Enter a description of what you've seen:
+        </label>
+      </h2>
+      <input
+        type="textarea"
+        id="new-todo-desc"
+        className="input input__lg"
+        name="textarea"
+        autoComplete="off"
+        value={description}
+        onChange={handleDescChange}
       />
 
       <button type="submit" className="btn btn__primary btn__lg">

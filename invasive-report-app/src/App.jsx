@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { nanoid } from "nanoid";
+import moment from "moment";
 import Todo from "./components/Todo";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import "./styles.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const FILTER_MAP = {
   All: () => true,
@@ -14,9 +16,8 @@ const FILTER_MAP = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
-function App(props) {
+function App() {
   const [tasks, setTasks] = usePersistedState("tasks", []);
-  // const [tasks, setTasks] = useState(props.tasks);
   const [filter, setFilter] = useState("All");
   const [lastInsertedId, setLastInsertedId] = useState("");
 
@@ -60,7 +61,6 @@ function App(props) {
   }
 
   function toggleTaskCompleted(id) {
-    /* console.log(tasks[0]); */
     const updatedTasks = tasks.map((task) => {
       // if this task has the same ID as the edited task
       if (id === task.id) {
@@ -78,10 +78,10 @@ function App(props) {
     setTasks(remainingTasks);
   }
 
-  function editTask(id, newName) {
+  function editTask(id, newName, newDescription) {
     const editedTaskList = tasks.map((task) => {
       if (id === task.id) {
-        return { ...task, name: newName };
+        return { ...task, name: newName, description: newDescription };
       }
       return task;
     });
@@ -109,6 +109,8 @@ function App(props) {
       <Todo
         id={task.id}
         name={task.name}
+        description={task.description}
+        timestamp={task.timestamp}
         completed={task.completed}
         key={task.id}
         location={task.location}
@@ -128,13 +130,16 @@ function App(props) {
     />
   ));
 
-  function addTask(name) {
-    const id = "todo-" + nanoid();
+  function addTask(name, description) {
+    const id = "report-" + nanoid();
+    const timestamp = moment().format("MMMM Do YYYY, h:mm:ss a");
     const newTask = {
       id: id,
       name: name,
+      description: description,
       completed: false,
       location: { latitude: "##", longitude: "##", error: "##" },
+      timestamp: timestamp,
     };
     setLastInsertedId(id);
     setTasks([...tasks, newTask]);

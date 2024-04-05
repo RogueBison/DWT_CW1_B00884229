@@ -3,6 +3,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import Webcam from "react-webcam";
 import { addPhoto, getPhotoSrc } from "../db.jsx";
+import Map, { Marker } from "react-map-gl";
 
 function Todo(props) {
   /* console.log(props); */
@@ -24,7 +25,7 @@ function Todo(props) {
     <form className="stack-small" onSubmit={handleSubmit}>
       <div className="form-group">
         <label className="todo-label" htmlFor={props.id}>
-          New name for {props.name}
+          New name for <h3>{props.name}</h3>
         </label>
         <input
           id={props.id}
@@ -60,13 +61,38 @@ function Todo(props) {
           defaultChecked={props.completed}
           onChange={() => props.toggleTaskCompleted(props.id)}
         />
+
         <label className="todo-label" htmlFor={props.id}>
-          {props.name}
-          <a href={props.location.mapURL}>(map)</a> {/*W07 CAM - improvement*/}
-          &nbsp; | &nbsp;
-          <a href={props.location.smsURL}>(sms)</a> {/*W07 CAM - improvement*/}
+          Name of Report: <span className="report-name">{props.name}</span>
         </label>
       </div>
+
+      <p>{props.description}</p>
+
+      <Map
+        mapboxAccessToken="pk.eyJ1IjoibWFydGluLXV3cyIsImEiOiJjbGZpb2Nncjgxc29iM3RuejllZGJtMXNlIn0.xQnKJpu6xPpshPIvozaWqw"
+        initialViewState={{
+          longitude: props.location.longitude,
+          latitude: props.location.latitude,
+          zoom: 9,
+        }}
+        style={{ height: 400 }}
+        className="map-width"
+        mapStyle="mapbox://styles/mapbox/streets-v9"
+      >
+        <Marker
+          longitude={props.location.longitude}
+          latitude={props.location.latitude}
+          anchor="bottom"
+        >
+          <img src="./Map_marker.png" style={{ width: 35, height: 55 }} />
+        </Marker>
+      </Map>
+      <h4>
+        Location coordinates: {props.location.longitude},{" "}
+        {props.location.latitude}
+      </h4>
+
       <div className="btn-group">
         <button type="button" className="btn" onClick={() => setEditing(true)}>
           Edit <span className="visually-hidden">{props.name}</span>
@@ -106,6 +132,7 @@ function Todo(props) {
           Delete <span className="visually-hidden">{props.name}</span>
         </button>
       </div>
+      <h5>Report made on {props.timestamp}</h5>
     </div>
   );
 
@@ -147,10 +174,24 @@ const WebcamCapture = (props) => {
     console.log("cancelPhoto", id, imgSrc.length, id);
   };
 
+  const videoConstraints = {
+    width: 1280,
+    height: 720,
+    facingMode: { exact: "environment" },
+  };
+
   return (
     <>
       {!imgSrc && (
-        <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
+        <Webcam
+          audio={false}
+          /* height={720}
+          width={1280}
+          facingMode={environment} */
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          videoConstraints={videoConstraints}
+        />
       )}
       {imgSrc && <img src={imgSrc} />}
       <div className="btn-group">

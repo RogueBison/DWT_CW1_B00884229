@@ -68,6 +68,13 @@ body {
 }
 /* End resets */
 /* Global styles */
+.report-name {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.map-width {
+  width: 100% !important;
+}
 .form-group > input[type="text"] {
   display: inline-block;
   margin-top: 0.4rem;
@@ -111,7 +118,6 @@ body {
 .label-wrapper {
   flex: 0 0 100%;
   margin: 0;
-  text-align: center;
 }
 .visually-hidden {
   clip: rect(1px 1px 1px 1px);
@@ -177,7 +183,6 @@ body {
   font-weight: 300;
   margin-bottom: 1rem;
   padding: 0.8rem;
-  text-align: center;
 }
 .input__lg {
   border: 2px solid #000;
@@ -206,6 +211,11 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  border: solid 2px #333;
+  padding: 20px;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  margin-bottom: 15px;
 }
 .todo > * {
   flex: 0 0 100%;
