@@ -6,18 +6,23 @@ import { addPhoto, getPhotoSrc } from "../db.jsx";
 import Map, { Marker } from "react-map-gl";
 
 function Todo(props) {
-  /* console.log(props); */
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
+  const [newDesc, setNewDesc] = useState("");
 
-  function handleChange(e) {
+  function handleNameChange(e) {
     setNewName(e.target.value);
+  }
+
+  function handleDescChange(e) {
+    setNewDesc(e.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.editTask(props.id, newName);
+    props.editReport(props.id, newName, newDesc);
     setNewName("");
+    setNewDesc("");
     setEditing(false);
   }
 
@@ -25,14 +30,27 @@ function Todo(props) {
     <form className="stack-small" onSubmit={handleSubmit}>
       <div className="form-group">
         <label className="todo-label" htmlFor={props.id}>
-          New name for <h3>{props.name}</h3>
+          Edit name for report:{" "}
+          <span className="report-name">{props.name}</span>
         </label>
         <input
           id={props.id}
           className="todo-text"
           type="text"
           value={newName}
-          onChange={handleChange}
+          onChange={handleNameChange}
+        />
+      </div>
+      <div className="form-group">
+        <label className="todo-label" htmlFor={props.id}>
+          Edit description:
+        </label>
+        <input
+          id={props.id}
+          className="todo-text"
+          type="text"
+          value={newDesc}
+          onChange={handleDescChange}
         />
       </div>
       <div className="btn-group">
@@ -46,7 +64,9 @@ function Todo(props) {
         </button>
         <button type="submit" className="btn btn__primary todo-edit">
           Save
-          <span className="visually-hidden">new name for {props.name}</span>
+          <span className="visually-hidden">
+            new name and description for {props.name}
+          </span>
         </button>
       </div>
     </form>
@@ -56,10 +76,8 @@ function Todo(props) {
     <div className="stack-small">
       <div className="c-cb">
         <input
-          id={props.id}
           type="checkbox"
-          defaultChecked={props.completed}
-          onChange={() => props.toggleTaskCompleted(props.id)}
+          onChange={() => props.toggleReportChecked(props.id)}
         />
 
         <label className="todo-label" htmlFor={props.id}>
@@ -89,9 +107,9 @@ function Todo(props) {
         </Marker>
       </Map>
       <h4>
-        Location coordinates: {props.location.longitude},{" "}
-        {props.location.latitude}
+        Location: {props.location.longitude}, {props.location.latitude}
       </h4>
+      <h4>Reported on {props.timestamp}</h4>
 
       <div className="btn-group">
         <button type="button" className="btn" onClick={() => setEditing(true)}>
@@ -107,7 +125,7 @@ function Todo(props) {
           modal
         >
           <div>
-            <WebcamCapture id={props.id} photoedTask={props.photoedTask} />
+            <WebcamCapture id={props.id} photoedReport={props.photoedReport} />
           </div>
         </Popup>
 
@@ -124,15 +142,7 @@ function Todo(props) {
             <ViewPhoto id={props.id} alt={props.name} />
           </div>
         </Popup>
-        <button
-          type="button"
-          className="btn btn__danger"
-          onClick={() => props.deleteTask(props.id)}
-        >
-          Delete <span className="visually-hidden">{props.name}</span>
-        </button>
       </div>
-      <h5>Report made on {props.timestamp}</h5>
     </div>
   );
 
@@ -148,7 +158,7 @@ const WebcamCapture = (props) => {
   useEffect(() => {
     if (photoSave) {
       console.log("useEffect detected photoSave");
-      props.photoedTask(imgId);
+      props.photoedReport(imgId);
       setPhotoSave(false);
     }
   });

@@ -16,19 +16,19 @@ export default function Form(props) {
       return;
     }
     setAddition(true);
-    props.addTask(name, description);
+    props.addReport(name, description);
     setName("");
     setDescription("");
   }
 
-  function handleNameChange() {
-    setName(event.target.value);
-    console.log(event.target.value);
+  function handleNameChange(e) {
+    setName(e.target.value);
+    console.log(e.target.value);
   }
 
-  function handleDescChange() {
-    setDescription(event.target.value);
-    console.log(event.target.value);
+  function handleDescChange(e) {
+    setDescription(e.target.value);
+    console.log(e.target.value);
   }
 
   return (
@@ -38,7 +38,6 @@ export default function Form(props) {
           Enter a name for new report:
         </label>
       </h2>
-
       <input
         type="text"
         id="new-todo-name"
@@ -55,17 +54,17 @@ export default function Form(props) {
         </label>
       </h2>
       <input
-        type="textarea"
+        type="text"
         id="new-todo-desc"
         className="input input__lg"
-        name="textarea"
+        name="text"
         autoComplete="off"
         value={description}
         onChange={handleDescChange}
       />
 
       <button type="submit" className="btn btn__primary btn__lg">
-        Submit Report
+        Make Report
       </button>
     </form>
   );

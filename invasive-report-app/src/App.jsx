@@ -1,24 +1,16 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { nanoid } from "nanoid";
+import Popup from "reactjs-popup";
 import moment from "moment";
 import Todo from "./components/Todo";
 import Form from "./components/Form";
-import FilterButton from "./components/FilterButton";
 import "./styles.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-const FILTER_MAP = {
-  All: () => true,
-  Active: (task) => !task.completed,
-  Completed: (task) => task.completed,
-};
-
-const FILTER_NAMES = Object.keys(FILTER_MAP);
-
 function App() {
-  const [tasks, setTasks] = usePersistedState("tasks", []);
-  const [filter, setFilter] = useState("All");
+  const [reports, setReports] = usePersistedState("reports", []);
+  const [checkedReports, setCheckedReports] = useState([]);
   const [lastInsertedId, setLastInsertedId] = useState("");
 
   const geoFindMe = () => {
@@ -33,12 +25,8 @@ function App() {
   const success = (position) => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    console.log(latitude, longitude);
     console.log(`Latitude: ${latitude}°, Longitude: ${longitude}°`);
-    console.log(
-      `Try here: https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`
-    );
-    locateTask(lastInsertedId, {
+    locateReport(lastInsertedId, {
       latitude: latitude,
       longitude: longitude,
       error: "",
@@ -60,106 +48,89 @@ function App() {
     return [state, setState];
   }
 
-  function toggleTaskCompleted(id) {
-    const updatedTasks = tasks.map((task) => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        // use object spread to make a new object
-        // whose `completed` prop has been inverted
-        return { ...task, completed: !task.completed };
+  function toggleReportChecked(id) {
+    setCheckedReports((prevCheckedReports) =>
+      prevCheckedReports.includes(id)
+        ? prevCheckedReports.filter((reportId) => reportId !== id)
+        : [...prevCheckedReports, id]
+    );
+  }
+
+  function deleteReport(close) {
+    const remainingReports = reports.filter(
+      (report) => !checkedReports.includes(report.id)
+    );
+    setReports(remainingReports);
+    setCheckedReports([]);
+    close();
+  }
+
+  function editReport(id, newName, newDescription) {
+    const editedReportList = reports.map((report) => {
+      if (id === report.id) {
+        return { ...report, name: newName, description: newDescription };
       }
-      return task;
+      return report;
     });
-    setTasks(updatedTasks);
+    setReports(editedReportList);
   }
 
-  function deleteTask(id) {
-    const remainingTasks = tasks.filter((task) => id !== task.id);
-    setTasks(remainingTasks);
-  }
-
-  function editTask(id, newName, newDescription) {
-    const editedTaskList = tasks.map((task) => {
-      if (id === task.id) {
-        return { ...task, name: newName, description: newDescription };
+  function locateReport(id, location) {
+    const locatedReportList = reports.map((report) => {
+      if (id === report.id) {
+        return { ...report, location: location };
       }
-      return task;
+      return report;
     });
-    setTasks(editedTaskList);
+    setReports(locatedReportList);
   }
 
-  function locateTask(id, location) {
-    console.log("locate Task", id, " before");
-    console.log(location, tasks);
-    const locatedTaskList = tasks.map((task) => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        //
-        return { ...task, location: location };
-      }
-      return task;
-    });
-    console.log(locatedTaskList);
-    setTasks(locatedTaskList);
-  }
-
-  const taskList = tasks
-    ?.filter(FILTER_MAP[filter])
-    .map((task) => (
-      <Todo
-        id={task.id}
-        name={task.name}
-        description={task.description}
-        timestamp={task.timestamp}
-        completed={task.completed}
-        key={task.id}
-        location={task.location}
-        toggleTaskCompleted={toggleTaskCompleted}
-        photoedTask={photoedTask}
-        deleteTask={deleteTask}
-        editTask={editTask}
-      />
-    ));
-
-  const filterList = FILTER_NAMES.map((name) => (
-    <FilterButton
-      key={name}
-      name={name}
-      isPressed={name === filter}
-      setFilter={setFilter}
+  const reportList = reports.map((report) => (
+    <Todo
+      id={report.id}
+      name={report.name}
+      description={report.description}
+      timestamp={report.timestamp}
+      key={report.id}
+      location={report.location}
+      photoedReport={photoedReport}
+      deleteReport={deleteReport}
+      editReport={editReport}
+      isChecked={checkedReports}
+      toggleReportChecked={toggleReportChecked}
     />
   ));
 
-  function addTask(name, description) {
+  function addReport(name, description) {
     const id = "report-" + nanoid();
     const timestamp = moment().format("MMMM Do YYYY, h:mm:ss a");
-    const newTask = {
+    const newReport = {
       id: id,
       name: name,
       description: description,
-      completed: false,
       location: { latitude: "##", longitude: "##", error: "##" },
       timestamp: timestamp,
     };
     setLastInsertedId(id);
-    setTasks([...tasks, newTask]);
+    setReports([...reports, newReport]);
   }
 
-  const reportsNoun = taskList.length !== 1 ? "reports" : "report";
-  const headingText = `You've made ${taskList.length} ${reportsNoun}`;
+  const createdNoun = reportList.length !== 1 ? "reports" : "report";
+  const reportsMade = `You've made ${reportList.length} ${createdNoun}`;
 
-  function photoedTask(id) {
-    console.log("photoedTask", id);
-    const photoedTaskList = tasks.map((task) => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        //
-        return { ...task, photo: true };
+  const checkedNoun = checkedReports.length > 1 ? "reports" : "report";
+  const reportsChecked = `You're about to delete ${checkedReports.length} ${checkedNoun}`;
+
+  function photoedReport(id) {
+    console.log("photoedReport", id);
+    const photoedReportList = reports.map((report) => {
+      if (id === report.id) {
+        return { ...report, photo: true };
       }
-      return task;
+      return report;
     });
-    console.log(photoedTaskList);
-    setTasks(photoedTaskList);
+    console.log(photoedReportList);
+    setReports(photoedReportList);
   }
 
   return (
@@ -171,17 +142,42 @@ function App() {
         to record the geolocation of where you've made the report.
       </p>
 
-      <Form addTask={addTask} geoFindMe={geoFindMe} />
+      <Form addReport={addReport} geoFindMe={geoFindMe} />
 
-      <div className="filters btn-group stack-exception">{filterList}</div>
+      <h4>Reports selected: {checkedReports.length}</h4>
 
-      <h2 id="list-heading">{headingText}</h2>
+      <Popup
+        trigger={
+          <button type="button" className="btn btn__danger btn__lg">
+            Delete
+          </button>
+        }
+        modal
+        closeOnDocumentClick={false}
+      >
+        {(close) => (
+          <div className="popup">
+            <h2>{reportsChecked}</h2>
+            <p>Are you sure you want to continue?</p>
+            <div className="btn-group">
+              <button className="btn" onClick={() => deleteReport(close)}>
+                Proceed
+              </button>
+              <button className="btn" onClick={close}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </Popup>
+
+      <h2 id="list-heading">{reportsMade}</h2>
       <ul
         role="list"
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading"
       >
-        {taskList}
+        {reportList}
       </ul>
     </div>
   );
