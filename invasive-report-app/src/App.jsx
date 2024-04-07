@@ -6,7 +6,6 @@ import moment from "moment";
 import Todo from "./components/Todo";
 import Form from "./components/Form";
 import "./styles.css";
-import "mapbox-gl/dist/mapbox-gl.css";
 
 function App() {
   const [reports, setReports] = usePersistedState("reports", []);
@@ -96,7 +95,6 @@ function App() {
       photoedReport={photoedReport}
       deleteReport={deleteReport}
       editReport={editReport}
-      isChecked={checkedReports}
       toggleReportChecked={toggleReportChecked}
     />
   ));
@@ -135,11 +133,16 @@ function App() {
 
   return (
     <div className="todoapp stack-large">
-      <h3>Use this app to report an invasive species in Scotland.</h3>
+      <h1>Animal Reporting Application</h1>
+      <h2>Use this app to report invasive species in Scotland.</h2>
       <p>
         You can create a post describing the animal you've seen that you believe
-        to be invasive. Enabling <i>'location'</i> on you device will allow you
-        to record the geolocation of where you've made the report.
+        to be invasive. Enabling <i>'location'</i> on you device will allow the
+        app to geolocate where you've made the report and mark that location on
+        a map.
+      </p>
+      <p>
+        Once you have created a post, you'll will then be able to take a photo.
       </p>
 
       <Form addReport={addReport} geoFindMe={geoFindMe} />
@@ -160,10 +163,13 @@ function App() {
             <h2>{reportsChecked}</h2>
             <p>Are you sure you want to continue?</p>
             <div className="btn-group">
-              <button className="btn" onClick={() => deleteReport(close)}>
+              <button
+                className="btn btn__primary"
+                onClick={() => deleteReport(close)}
+              >
                 Proceed
               </button>
-              <button className="btn" onClick={close}>
+              <button className="btn btn__danger" onClick={close}>
                 Cancel
               </button>
             </div>

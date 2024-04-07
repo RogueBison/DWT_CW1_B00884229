@@ -9,6 +9,13 @@ function Todo(props) {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
+  const [isLocated, setLocated] = useState(false);
+
+  useEffect(() => {
+    if (props.location.latitude !== "##" && props.location.longitude !== "##") {
+      setLocated(true);
+    }
+  }, [props.location.latitude, props.location.longitude]);
 
   function handleNameChange(e) {
     setNewName(e.target.value);
@@ -87,29 +94,31 @@ function Todo(props) {
 
       <p>{props.description}</p>
 
-      <Map
-        mapboxAccessToken="pk.eyJ1IjoibWFydGluLXV3cyIsImEiOiJjbGZpb2Nncjgxc29iM3RuejllZGJtMXNlIn0.xQnKJpu6xPpshPIvozaWqw"
-        initialViewState={{
-          longitude: props.location.longitude,
-          latitude: props.location.latitude,
-          zoom: 9,
-        }}
-        style={{ height: 400 }}
-        className="map-width"
-        mapStyle="mapbox://styles/mapbox/streets-v9"
-      >
-        <Marker
-          longitude={props.location.longitude}
-          latitude={props.location.latitude}
-          anchor="bottom"
+      {isLocated && (
+        <Map
+          mapboxAccessToken="pk.eyJ1IjoibWFydGluLXV3cyIsImEiOiJjbGZpb2Nncjgxc29iM3RuejllZGJtMXNlIn0.xQnKJpu6xPpshPIvozaWqw"
+          initialViewState={{
+            longitude: props.location.longitude,
+            latitude: props.location.latitude,
+            zoom: 9,
+          }}
+          style={{ height: 400 }}
+          className="map-width"
+          mapStyle="mapbox://styles/mapbox/streets-v9"
         >
-          <img src="./Map_marker.png" style={{ width: 35, height: 55 }} />
-        </Marker>
-      </Map>
-      <h4>
-        Location: {props.location.longitude}, {props.location.latitude}
-      </h4>
-      <h4>Reported on {props.timestamp}</h4>
+          <Marker
+            longitude={props.location.longitude}
+            latitude={props.location.latitude}
+            anchor="bottom"
+          >
+            <img src="./Map_marker.png" style={{ width: 35, height: 55 }} />
+          </Marker>
+        </Map>
+      )}
+
+      <p>
+        Coordinates: {props.location.longitude}, {props.location.latitude}
+      </p>
 
       <div className="btn-group">
         <button type="button" className="btn" onClick={() => setEditing(true)}>
@@ -143,6 +152,7 @@ function Todo(props) {
           </div>
         </Popup>
       </div>
+      <h5>Reported on {props.timestamp}</h5>
     </div>
   );
 

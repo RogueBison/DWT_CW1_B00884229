@@ -51,14 +51,15 @@ input {
   overflow: visible;
 }
 input[type="text"] {
-  border-radius: 0;
+  color: #ebe8e8;
 }
 body {
-  background-color: #f5f5f5;
+  background-color: #212121;
   font: 1.6rem/1.25 Arial, sans-serif;
   margin: 0 auto;
   max-width: 95rem;
   width: 100%;
+  color: #ebe8e8;
 }
 @media screen and (min-width: 620px) {
   body {
@@ -72,6 +73,13 @@ body {
   font-weight: bold;
   text-transform: uppercase;
 }
+.popup-content {
+  width: auto !important;
+  border-radius: 5px;
+  padding: 5px 15px 15px;
+  border: solid 2px #ebe8e8;
+  background-color: #212121;
+}
 .map-width {
   width: 100% !important;
 }
@@ -80,30 +88,30 @@ body {
   margin-top: 0.4rem;
 }
 .btn {
-  border: 0.2rem solid #4d4d4d;
+  border: 0.2rem solid #ebe8e8;
   cursor: pointer;
   padding: 0.8rem 1rem 0.7rem;
   text-transform: capitalize;
-}
-.btn.toggle-btn {
-  border-color: #d3d3d3;
-  border-width: 1px;
-}
-.btn.toggle-btn[aria-pressed="true"] {
-  border-color: #4d4d4d;
-  text-decoration: underline;
+  border-radius: 8px;
 }
 .btn__danger {
-  background-color: #ff5733;
   border-color: #ff5733;
-  color: #fff;
+  color: #ff5733;
+}
+.btn__danger[aria-pressed="true"] {
+  background-color: #ff5733;
+  color: #333;
 }
 .btn__filter {
   border-color: lightgrey;
 }
 .btn__primary {
+  border-color: #50c878;
+  color: #50c878;
+}
+.btn__primary[aria-pressed="true"] {
   background-color: #50c878;
-  color: #fff;
+  color: #333;
 }
 .btn-group {
   display: flex;
@@ -117,7 +125,7 @@ body {
 }
 .label-wrapper {
   flex: 0 0 100%;
-  margin: 0;
+  /* margin: 0; */
 }
 .visually-hidden {
   clip: rect(1px 1px 1px 1px);
@@ -152,10 +160,10 @@ body {
 /* End global styles */
 /* General app styles */
 .todoapp {
-  background: #fff;
+  background: #333;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%), 0 2.5rem 5rem 0 rgb(0 0 0 / 10%);
   margin: 2rem 0 4rem 0;
-  padding: 1rem;
+  padding: 2rem;
   position: relative;
 }
 @media screen and (min-width: 550px) {
@@ -182,13 +190,15 @@ body {
   line-height: 1.01567;
   font-weight: 300;
   margin-bottom: 1rem;
-  padding: 0.8rem;
+  /* padding: 0.8rem 0.8rem 0.8rem 0; */
 }
 .input__lg {
-  border: 1px solid #333;
+  border: 1px solid #ebe8e8;
   padding: 1rem;
   height: 100px;
   line-height: 28px;
+  border-radius: 8px;
+  background-color: #212121;
 }
 .input__lg:focus-visible {
   border-color: #4d4d4d;
@@ -213,9 +223,8 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  border: solid 2px #333;
+  border: solid 2px #ebe8e8;
   padding: 20px;
-  background-color: #f3f3f3;
   border-radius: 10px;
   margin-bottom: 15px;
 }
