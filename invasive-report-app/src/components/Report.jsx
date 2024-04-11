@@ -194,19 +194,19 @@ const WebcamCapture = (props) => {
     console.log("cancelPhoto", id, imgSrc.length, id);
   };
 
-  /* const videoConstraints = {
-    width: 1280,
-    height: 720,
+  const videoConstraints = {
+    width: 360,
+    height: 740,
     facingMode: { exact: "environment" },
-  }; */
+  };
 
   return (
     <>
       {!imgSrc && (
         <Webcam
           audio={false}
-          height={720}
-          width={1280}
+          height={740}
+          width={360}
           facingMode={environment}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
