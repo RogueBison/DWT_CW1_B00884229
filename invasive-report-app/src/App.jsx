@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { nanoid } from "nanoid";
 import Popup from "reactjs-popup";
 import moment from "moment";
-import Todo from "./components/Todo";
+import Report from "./components/Report";
 import Form from "./components/Form";
 import "./styles.css";
 
@@ -85,7 +85,7 @@ function App() {
   }
 
   const reportList = reports.map((report) => (
-    <Todo
+    <Report
       id={report.id}
       name={report.name}
       description={report.description}

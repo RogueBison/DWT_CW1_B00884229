@@ -34,13 +34,13 @@ export default function Form(props) {
   return (
     <form onSubmit={handleSubmit}>
       <h2 className="label-wrapper">
-        <label htmlFor="new-todo-name" className="label__lg">
+        <label htmlFor="new-report-name" className="label__lg">
           Enter a name for new report:
         </label>
       </h2>
       <input
         type="text"
-        id="new-todo-name"
+        id="new-report-name"
         className="input input__lg"
         name="text"
         autoComplete="off"
@@ -49,13 +49,13 @@ export default function Form(props) {
       />
 
       <h2 className="label-wrapper">
-        <label htmlFor="new-todo-desc" className="label__lg">
+        <label htmlFor="new-report-desc" className="label__lg">
           Enter a description of what you've seen:
         </label>
       </h2>
       <input
         type="text"
-        id="new-todo-desc"
+        id="new-report-desc"
         className="input input__lg"
         name="text"
         autoComplete="off"

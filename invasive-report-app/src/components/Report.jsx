@@ -5,7 +5,7 @@ import Webcam from "react-webcam";
 import { addPhoto, getPhotoSrc } from "../db.jsx";
 import Map, { Marker } from "react-map-gl";
 
-function Todo(props) {
+function Report(props) {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
@@ -194,20 +194,20 @@ const WebcamCapture = (props) => {
     console.log("cancelPhoto", id, imgSrc.length, id);
   };
 
-  const videoConstraints = {
+  /* const videoConstraints = {
     width: 1280,
     height: 720,
     facingMode: { exact: "environment" },
-  };
+  }; */
 
   return (
     <>
       {!imgSrc && (
         <Webcam
           audio={false}
-          /* height={720}
+          height={720}
           width={1280}
-          facingMode={environment} */
+          facingMode={environment}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
           videoConstraints={videoConstraints}
@@ -258,4 +258,4 @@ const ViewPhoto = (props) => {
   );
 };
 
-export default Todo;
+export default Report;
