@@ -195,8 +195,8 @@ const WebcamCapture = (props) => {
   };
 
   const videoConstraints = {
-    width: 360,
-    height: 740,
+    width: 300,
+    height: 300,
     facingMode: { exact: "environment" },
   };
 
