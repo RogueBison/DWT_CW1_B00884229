@@ -205,9 +205,9 @@ const WebcamCapture = (props) => {
       {!imgSrc && (
         <Webcam
           audio={false}
-          height={740}
+          /* height={740}
           width={360}
-          facingMode={environment}
+          facingMode={environment} */
           ref={webcamRef}
           screenshotFormat="image/jpeg"
           videoConstraints={videoConstraints}
