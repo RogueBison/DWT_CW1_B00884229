@@ -147,8 +147,6 @@ function App() {
 
       <Form addReport={addReport} geoFindMe={geoFindMe} />
 
-      <h4>Reports selected: {checkedReports.length}</h4>
-
       <Popup
         trigger={
           <button type="button" className="btn btn__danger btn__lg">
@@ -176,6 +174,8 @@ function App() {
           </div>
         )}
       </Popup>
+
+      <h4>Reports selected: {checkedReports.length}</h4>
 
       <h2 id="list-heading">{reportsMade}</h2>
       <ul

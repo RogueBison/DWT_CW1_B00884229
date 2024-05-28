@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 export default function Form(props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [addition, setAddition] = useState(false);
+
   useEffect(() => {
     if (addition) {
       console.log("useEffect detected addition");
@@ -10,6 +12,7 @@ export default function Form(props) {
       setAddition(false);
     }
   });
+
   function handleSubmit(event) {
     event.preventDefault();
     if (!name.trim()) {
